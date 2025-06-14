@@ -1,3 +1,8 @@
+/*
+"The Interface Segregation Principle helps us avoid pushing unnecessary contracts onto classes. 
+A glider shouldn't pretend to have fuel tanks or movie screens — so don't force it to!"
+*/
+
 #include <iostream>
 using namespace std;
 
