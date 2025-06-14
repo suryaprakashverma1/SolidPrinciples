@@ -1,3 +1,6 @@
+//“This is a classic violation of Interface Segregation Principle. Glider is forced to depend on methods it doesn’t use, which leads to dummy or misleading implementations. 
+//We should instead split the interface so that each class only implements what it actually needs.”
+
 #include <iostream>
 #include <string>
 using namespace std;
