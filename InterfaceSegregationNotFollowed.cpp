@@ -1,70 +1,92 @@
-/*
-"The Interface Segregation Principle helps us avoid pushing unnecessary contracts onto classes. 
-A glider shouldn't pretend to have fuel tanks or movie screens — so don't force it to!"
-*/
+#include <iostream>
+#include <string>
+using namespace std;
 
 #include <iostream>
 using namespace std;
 
-
-class IAircraftSystem {
+// Fat interface that includes engine and autopilot features
+class IAircraft {
 public:
-    virtual void toggleEntertainment(int input) = 0;
-    virtual void toggleNavigation(int input) = 0;
-    virtual int calculateRemainingDistance(int fuelLiters) = 0;
-    virtual ~IAircraftSystem() = default;
+    virtual void fly() = 0;
+    virtual void startEngine() = 0;
+    virtual void stopEngine() = 0;
+    virtual void enableAutopilot() = 0;
+    virtual void disableAutopilot() = 0;
+    virtual ~IAircraft() = default;
 };
 
-class Boeing737 : public IAircraftSystem {
+// Boeing must implement all (which is fine)
+class Boeing : public IAircraft {
 public:
-    void toggleEntertainment(int input) override {
-        cout << "Boeing737: Entertainment system " << (input ? "activated." : "shut down.") << endl;
+    void fly() override {
+        cout << "Boeing is flying with engine thrust.\n";
     }
 
-    void toggleNavigation(int input) override {
-        cout << "Boeing737: Navigation system " << (input ? "activated." : "shut down.") << endl;
+    void startEngine() override {
+        cout << "Boeing: Engine started.\n";
     }
 
-    int calculateRemainingDistance(int fuelLiters) override {
-        cout << "Boeing737: Calculating remaining range based on fuel..." << endl;
-        return fuelLiters * 12;
-    }
-};
-
-class Glider : public IAircraftSystem {
-public:
-    void toggleEntertainment(int input) override {
-        // Glider has no entertainment
-        cout << "Glider: ❌ No entertainment system available!" << endl;
+    void stopEngine() override {
+        cout << "Boeing: Engine stopped.\n";
     }
 
-    void toggleNavigation(int input) override {
-        // Glider has no navigation system
-        cout << "Glider: ❌ No navigation system available!" << endl;
+    void enableAutopilot() override {
+        cout << "Boeing: Autopilot enabled.\n";
     }
 
-    int calculateRemainingDistance(int fuelLiters) override {
-        // Gliders don't even use fuel!
-        cout << "Glider: ❌ No fuel system — gliding is based on air currents." << endl;
-        return 0;
+    void disableAutopilot() override {
+        cout << "Boeing: Autopilot disabled.\n";
     }
 };
 
+// Glider is forced to implement irrelevant methods
+class Glider : public IAircraft {
+public:
+    void fly() override {
+        cout << "Glider is flying using air currents.\n";
+    }
+
+    void startEngine() override {
+        // Not applicable to glider
+        cout << "Glider: No engine to start!\n";
+    }
+
+    void stopEngine() override {
+        // Not applicable to glider
+        cout << "Glider: No engine to stop!\n";
+    }
+
+    void enableAutopilot() override {
+        // Not applicable to glider
+        cout << "Glider: No autopilot available!\n";
+    }
+
+    void disableAutopilot() override {
+        // Not applicable to glider
+        cout << "Glider: No autopilot to disable!\n";
+    }
+};
 
 int main() {
-     IAircraftSystem* aircraft = new Boeing737();
-    aircraft->toggleEntertainment(1);
-    aircraft->toggleNavigation(1);
-    int dist = aircraft->calculateRemainingDistance(100);
-    cout << "Boeing737 range: " << dist << " km" << endl;
+    Boeing boeing;
+    Glider glider;
 
-    cout << "\n--- Switching to Glider ---\n";
-    aircraft = new Glider();
-    aircraft->toggleEntertainment(1);        // 💥 Meaningless
-    aircraft->toggleNavigation(1);           // 💥 Meaningless
-    dist = aircraft->calculateRemainingDistance(0); // 💥 Meaningless
-    cout << "Glider 'range': " << dist << " km" << endl;
+    cout << "--- Boeing ---\n";
+    boeing.fly();
+    boeing.startEngine();
+    boeing.enableAutopilot();
 
-    delete aircraft;
+    cout << "\n--- Glider ---\n";
+    glider.fly();
+    glider.startEngine();       // 💥 Shouldn't be required
+    glider.enableAutopilot();   // 💥 Shouldn't be required
+
     return 0;
 }
+
+
+
+
+
+
