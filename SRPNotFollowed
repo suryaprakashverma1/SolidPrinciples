@@ -1,0 +1,53 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Location {
+public:
+    float latitude;
+    float longitude;
+
+    Location(float lat, float lon) : latitude(lat), longitude(lon) {}
+};
+
+class Missile {
+public:
+    // This class is doing too much!
+    
+    Location* searchTarget(Location* from, Location* to) {
+        cout << "Searching for target using radar..." << endl;
+        return new Location(10.12f, 13.13f);  // Simulate search result
+    }
+
+    void lockTarget(Location* target) {
+        cout << "Locking target using infrared heat waves..." << endl;
+    }
+
+    string fire(Location* point) {
+        if (point != nullptr)
+            return "Fired";
+        else
+            return "Enter a valid location";
+    }
+
+    void execute(Location* start, Location* end) {
+        Location* targetLoc = searchTarget(start, end);
+        lockTarget(targetLoc);
+        cout << fire(targetLoc) << endl;
+
+        delete targetLoc; // cleanup, but still risky due to raw pointers
+    }
+};
+
+int main() {
+    Location* from = new Location(14.13f, 15.0f);
+    Location* to = new Location(10.0f, 15.0f);
+
+    Missile missile;
+    missile.execute(from, to);
+
+    delete from;
+    delete to;
+
+    return 0;
+}
