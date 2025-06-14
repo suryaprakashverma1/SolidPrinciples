@@ -29,3 +29,9 @@ Don't impliment fatty interfaces to force every one to impliment all even if the
 
 In C++ terms:
 Avoid designing fat interfaces — break them into smaller, more specific ones so that classes only implement what they need.
+
+Dipendency Inversion Principle:
+High-level modules should not depend on low-level modules. Both should depend on abstractions.
+High-level module: Aircraftmodel
+Low-level modules: AgniMessile, TejasMessile
+Abstraction: Messile interface
