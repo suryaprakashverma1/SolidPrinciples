@@ -1,6 +1,6 @@
 # SolidPrinciples
-
-
+SRP:
+calss should have only a single reason for change, it should not hold many responsibility but just one.
 
 
 🚀 Concept: Open-Closed Principle (OCP)
