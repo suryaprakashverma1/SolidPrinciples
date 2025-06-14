@@ -32,6 +32,7 @@ Avoid designing fat interfaces — break them into smaller, more specific ones s
 
 Dipendency Inversion Principle:
 High-level modules should not depend on low-level modules. Both should depend on abstractions.
+our example setup has:
 High-level module: Aircraftmodel
 Low-level modules: AgniMessile, TejasMessile
 Abstraction: Messile interface
