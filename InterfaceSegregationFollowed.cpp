@@ -1,63 +1,90 @@
 #include <iostream>
+#include <string>
 using namespace std;
 
-class EntertainmentSystem {
+// Base interface for all aircraft
+class IBasicAircraft {
 public:
-    virtual void toggleEntertainment(int input) = 0;
-    virtual ~EntertainmentSystem() = default;
+    virtual void fly() = 0;
+    virtual ~IBasicAircraft() = default;
 };
 
-class NavigationSystem {
+// Interface only for aircrafts that have engines
+class IEnginePowered {
 public:
-    virtual void toggleNavigation(int input) = 0;
-    virtual ~NavigationSystem() = default;
+    virtual void startEngine() = 0;
+    virtual void stopEngine() = 0;
+    virtual ~IEnginePowered() = default;
 };
 
-class FuelMonitor {
+// Interface only for aircrafts that support autopilot
+class IAutoPilotEnabled {
 public:
-    virtual int calculateRemainingDistance(int fuelLiters) = 0;
-    virtual ~FuelMonitor() = default;
+    virtual void enableAutopilot() = 0;
+    virtual void disableAutopilot() = 0;
+    virtual ~IAutoPilotEnabled() = default;
 };
 
-class Boeing737 : public EntertainmentSystem, public NavigationSystem, public FuelMonitor {
+class Boeing : public IBasicAircraft, public IEnginePowered, public IAutoPilotEnabled {
 public:
-    void toggleEntertainment(int input) override {
-        cout << "Boeing737: Entertainment system " << (input ? "activated." : "shut down.") << endl;
+    void fly() override {
+        cout << "Boeing is flying with engine thrust." << endl;
     }
 
-    void toggleNavigation(int input) override {
-        cout << "Boeing737: Navigation system " << (input ? "activated." : "shut down.") << endl;
+    void startEngine() override {
+        cout << "Boeing: Engine started." << endl;
     }
 
-    int calculateRemainingDistance(int fuelLiters) override {
-        cout << "Boeing737: Calculating remaining range based on fuel..." << endl;
-        return fuelLiters * 12; // dummy mileage
+    void stopEngine() override {
+        cout << "Boeing: Engine stopped." << endl;
+    }
+
+    void enableAutopilot() override {
+        cout << "Boeing: Autopilot enabled." << endl;
+    }
+
+    void disableAutopilot() override {
+        cout << "Boeing: Autopilot disabled." << endl;
     }
 };
 
-class Glider {
+class Glider : public IBasicAircraft {
 public:
-    void fly() {
-        cout << "Glider: Soaring with thermal currents. No onboard electronics." << endl;
+    void fly() override {
+        cout << "Glider is flying using air currents and no engine." << endl;
     }
 };
+
+void testFlight(IBasicAircraft* aircraft) {
+    aircraft->fly();
+}
+
+void testEngine(IEnginePowered* engineAircraft) {
+    engineAircraft->startEngine();
+    engineAircraft->stopEngine();
+}
+
+void testAutopilot(IAutoPilotEnabled* autopilotAircraft) {
+    autopilotAircraft->enableAutopilot();
+    autopilotAircraft->disableAutopilot();
+}
 
 int main() {
-    Boeing737 boeing;
+    Boeing boeing;
     Glider glider;
 
-    EntertainmentSystem* ent = &boeing;
-    ent->toggleEntertainment(1);
+    cout << "--- Testing Boeing ---" << endl;
+    testFlight(&boeing);
+    testEngine(&boeing);
+    testAutopilot(&boeing);
 
-    NavigationSystem* nav = &boeing;
-    nav->toggleNavigation(1);
-
-    FuelMonitor* fuel = &boeing;
-    int range = fuel->calculateRemainingDistance(100);
-    cout << "Boeing737 can fly approx. " << range << " km." << endl;
-
-    // Glider does not implement any of these systems
-    glider.fly();
+    cout << "\n--- Testing Glider ---" << endl;
+    testFlight(&glider);
+    // The following would be compile-time errors if uncommented:
+    // testEngine(&glider);
+    // testAutopilot(&glider);
 
     return 0;
 }
+
+
